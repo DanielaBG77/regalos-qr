@@ -1,499 +1,1642 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<title>Para ti</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&display=swap">
-<style>
-:root{--red:#e0132f;--ink:#2b1a1d;--line:#f0d9dc;--soft:#fdf3f4;color-scheme:light;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:#fff;color:var(--ink);font-family:"Playfair Display",Georgia,serif;line-height:1.55}
-main{max-width:440px;margin:0 auto;padding:0 22px 60px}
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;transition:min-height .6s ease}
-.hero.open{min-height:0;padding-top:34px}
-.heart{width:150px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:width .6s ease;animation:beat 1.2s ease-in-out infinite}
-.heart:active{transform:scale(.94)}
-.hero.open .heart{width:84px;animation:none}
-@keyframes beat{50%{transform:scale(1.1)}}
-.hint{font-style:italic;margin:6px 0 0;opacity:.7}
-.hero.open .hint{display:none}
-h1{font-size:2.1rem;font-style:italic;font-weight:500;margin:10px 0 0;line-height:1.2}
-.sub{font-style:italic;margin:4px 0 0;opacity:.75}
-.reveal{display:none}
-.reveal.on{display:block;animation:rise .8s ease both}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}}
-.heart:focus-visible,a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){.heart{animation:none}.reveal.on{animation:none}.hero,.heart{transition:none}}
-.carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:22px 2px 12px;scrollbar-width:none}
-.carousel::-webkit-scrollbar{display:none}
-.slide{flex:0 0 86%;scroll-snap-align:center;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:var(--soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;font-style:italic;padding:12px}
-.slide img{width:100%;height:100%;object-fit:cover;display:block;margin:-12px}
-.dots{display:flex;gap:7px;justify-content:center;margin:4px 0 30px}
-.dots b{width:8px;height:8px;border-radius:50%;background:var(--line)}.dots b.on{background:var(--red)}
-h2{font-size:1.4rem;font-style:italic;font-weight:500;margin:0 0 14px;text-align:center}
-.songs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0;padding:6px 2px 12px;list-style:none;scrollbar-width:none}
-.songs::-webkit-scrollbar{display:none}
-.song{flex:0 0 78%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:22px 16px 18px;border:1px solid var(--line);border-radius:22px;background:var(--soft)}
-.disc{flex:0 0 auto;width:170px;height:170px;border-radius:50%;border:0;padding:0;cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent;
-background:repeating-radial-gradient(circle,#161616 0 2px,#2c2c2c 2px 4px);box-shadow:0 4px 12px rgba(0,0,0,.3);animation:spin 3.2s linear infinite;animation-play-state:paused}
-.disc.play{animation-play-state:running}
-.disc .label{position:absolute;inset:27%;border-radius:50%;overflow:hidden;background:var(--red);border:2px solid #fff}
-.disc .label img{width:100%;height:100%;object-fit:cover;display:block}
-.disc:after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.disc:focus-visible,.pp:focus-visible{outline:3px solid var(--red);outline-offset:3px}
-.info{width:100%;min-width:0}
-.info b{font-weight:500;display:block;line-height:1.3}.info small{opacity:.7;font-style:italic;display:block}
-.prog{height:4px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
-.prog i{display:block;height:100%;width:0;background:var(--red)}
-.pp{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:.9rem;cursor:pointer}
-.ytbox{width:100%;display:none;border-radius:12px;overflow:hidden;background:#000}.ytbox.on{display:block}
-.ytbox iframe{display:block;width:100%;height:200px;border:0}
-.yterr{font-size:.85rem;font-style:italic;color:var(--red);min-height:0}.yterr:empty{display:none}
-.letter{white-space:pre-wrap;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:34px}
-.sign{text-align:right;font-style:italic;color:var(--red);margin-top:12px}
-</style>
-</head>
-<body>
-<main>
-  <section class="hero" id="hero">
-    <svg class="heart" id="heart" viewBox="0 0 100 90" role="button" tabindex="0" aria-label="Corazón: tócalo">
-      <path d="M50 85C10 55 2 30 18 15C32 2 46 10 50 22C54 10 68 2 82 15C98 30 90 55 50 85Z" fill="#e0132f"/>
-    </svg>
-    <p class="hint">Toca el corazón</p>
-    <div class="reveal" id="r1"><h1 id="titulo"></h1><p class="sub" id="subt"></p></div>
-  </section>
-
-  <div class="reveal" id="r2">
-    <div class="carousel" id="car"></div>
-    <div class="dots" id="dots"></div>
-    <h2 id="songtitle">Nuestras canciones</h2>
-    <ul class="songs" id="songs"></ul>
-    <div class="dots" id="songdots"></div>
-    <div class="letter" id="letter" style="display:none"><span id="carta"></span><div class="sign" id="firma"></div></div>
-  </div>
-</main>
-
-<script>
-/* ===== CONFIGURACIÓN: lo único que cambia por cliente ===== */
-var CONFIG = {
-  "titulo": "Felices 6 meses mi pedacito de cielo",
-  "subtitulo": "Gracias por estar a mi lado",
-  "fotos": [
-    "fotos/001.jpg",
-    "fotos/002.jpg",
-    "fotos/003.jpg",
-    "fotos/004.jpg",
-    "fotos/005.jpg",
-    "fotos/006.jpg",
-    "fotos/007.jpg",
-    "fotos/008.jpg",
-    "fotos/009.jpg",
-    "fotos/010.jpg",
-    "fotos/011.jpg",
-    "fotos/012.jpg",
-    "fotos/013.jpg",
-    "fotos/014.jpg",
-    "fotos/015.jpg",
-    "fotos/016.jpg",
-    "fotos/017.jpg",
-    "fotos/018.jpg",
-    "fotos/019.jpg",
-    "fotos/020.jpg",
-    "fotos/021.jpg",
-    "fotos/022.jpg",
-    "fotos/023.jpg",
-    "fotos/024.jpg",
-    "fotos/025.jpg",
-    "fotos/026.jpg",
-    "fotos/027.jpg",
-    "fotos/028.jpg",
-    "fotos/029.jpg",
-    "fotos/030.jpg",
-    "fotos/031.jpg",
-    "fotos/032.jpg",
-    "fotos/033.jpg",
-    "fotos/034.jpg",
-    "fotos/035.jpg",
-    "fotos/036.jpg",
-    "fotos/037.jpg",
-    "fotos/038.jpg",
-    "fotos/039.jpg",
-    "fotos/040.jpg",
-    "fotos/041.jpg",
-    "fotos/042.jpg",
-    "fotos/043.jpg",
-    "fotos/044.jpg",
-    "fotos/045.jpg",
-    "fotos/046.jpg",
-    "fotos/047.jpg",
-    "fotos/048.jpg",
-    "fotos/049.jpg",
-    "fotos/050.jpg",
-    "fotos/051.jpg",
-    "fotos/052.jpg",
-    "fotos/053.jpg",
-    "fotos/054.jpg"
-  ],
-  "fotoCanciones": "cancion.jpg",
-  "tituloCanciones": "Nuestras canciones",
-  "canciones": [
-    {
-      "titulo": "El Libro De La Vida - Te Amo Y Más (By: Diego Luna) (Letra)",
-      "artista": "",
-      "youtube": "p_1Osm5xE5Y",
-      "foto": "discos/01.jpg"
-    },
-    {
-      "titulo": "Sabrás, Herencia de Timbiquí - Video Oficial",
-      "artista": "",
-      "youtube": "srE7nr4xuGI",
-      "foto": "discos/02.jpg"
-    },
-    {
-      "titulo": "Te invito - Herencia de Timbiquí (video oficial)",
-      "artista": "",
-      "youtube": "eaKG17XoQ48",
-      "foto": "discos/03.jpg"
-    },
-    {
-      "titulo": "Vámonos a Marte",
-      "artista": "",
-      "youtube": "mxCW-5nUidw",
-      "foto": "discos/04.jpg"
-    },
-    {
-      "titulo": "Estar enamorado",
-      "artista": "",
-      "youtube": "h14vpBPY9MM",
-      "foto": "discos/05.jpg"
-    },
-    {
-      "titulo": "Brillas",
-      "artista": "",
-      "youtube": "MzNduKt0ylU",
-      "foto": "discos/06.jpg"
-    },
-    {
-      "titulo": "José José - Te Quiero Así (Letra/lyrics)",
-      "artista": "",
-      "youtube": "pXE2W4Rnjs0",
-      "foto": "discos/07.jpg"
-    },
-    {
-      "titulo": "José José - Buenos Días, Amor (Letra / Lyrics)",
-      "artista": "",
-      "youtube": "qSKfmr2r6B4",
-      "foto": "discos/08.jpg"
-    },
-    {
-      "titulo": "Carla Morrison - Disfruto (letra)",
-      "artista": "",
-      "youtube": "jwP1HRmDVII",
-      "foto": "discos/09.jpg"
-    },
-    {
-      "titulo": "Chichi Peralta   Amor narcotico",
-      "artista": "",
-      "youtube": "QMt7TWvY8VQ",
-      "foto": "discos/10.jpg"
-    },
-    {
-      "titulo": "Leonardo Favio - O Quizás Simplemente Le Regale una Rosa (Official Audio)",
-      "artista": "",
-      "youtube": "LEg5mroggFc",
-      "foto": "discos/11.jpg"
-    },
-    {
-      "titulo": "Dario Javier - Si Entendieras (Video Oficial)",
-      "artista": "",
-      "youtube": "_5MycQSty00",
-      "foto": "discos/12.jpg"
-    },
-    {
-      "titulo": "Miguel Bosé - Te Amaré (300 Millones (Actuación TVE))",
-      "artista": "",
-      "youtube": "e8-onsrhBBo",
-      "foto": "discos/13.jpg"
-    },
-    {
-      "titulo": "Bella, Wolfine -  Vídeo Oficial",
-      "artista": "",
-      "youtube": "UA0YaA06Puo",
-      "foto": "discos/14.jpg"
-    },
-    {
-      "titulo": "Prince Royce - Darte un Beso (Official Video)",
-      "artista": "",
-      "youtube": "bdOXnTbyk0g",
-      "foto": "discos/15.jpg"
-    },
-    {
-      "titulo": "Daniela Romo | De mi enamórate #Videoclip",
-      "artista": "",
-      "youtube": "2GWftGahyvw",
-      "foto": "discos/16.jpg"
-    },
-    {
-      "titulo": "Joan Sebastian – Hasta Que Amanezca (Letra Oficial)",
-      "artista": "",
-      "youtube": "bx-FrNoav5o",
-      "foto": "discos/17.jpg"
-    },
-    {
-      "titulo": "Dyango El Primer Beso",
-      "artista": "",
-      "youtube": "RhrFnaYednk",
-      "foto": "discos/18.jpg"
-    },
-    {
-      "titulo": "José José - Lo Dudo (Revisitado [Lyric Video])",
-      "artista": "",
-      "youtube": "CpBvjrkRKN4",
-      "foto": "discos/19.jpg"
-    },
-    {
-      "titulo": "Como Es Grande Mi Amor",
-      "artista": "",
-      "youtube": "nqxAXwYt5ME",
-      "foto": "discos/20.jpg"
-    },
-    {
-      "titulo": "Juan Gabriel - Siempre en Mi Mente (Cover Audio)",
-      "artista": "",
-      "youtube": "YzYmF059VkU",
-      "foto": "discos/21.jpg"
-    },
-    {
-      "titulo": "Jósean Log - Chachachá (Lyric Video)",
-      "artista": "",
-      "youtube": "sDMxQF18yvA",
-      "foto": "discos/22.jpg"
-    },
-    {
-      "titulo": "Hoy tengo ganas de ti",
-      "artista": "",
-      "youtube": "Jh_y54QFfOU",
-      "foto": "discos/23.jpg"
-    },
-    {
-      "titulo": "Camilo Sesto - El Amor De Mi Vida (Video TVE/Playback)",
-      "artista": "",
-      "youtube": "vM6r0Z8ie1g",
-      "foto": "discos/24.jpg"
-    },
-    {
-      "titulo": "Me Enamoré De Alguien Que También",
-      "artista": "",
-      "youtube": "kLKxDw2GQVg",
-      "foto": "discos/25.jpg"
-    },
-    {
-      "titulo": "Myriam Hernández - Eres (Visualiser)",
-      "artista": "",
-      "youtube": "bGbX6zOecis",
-      "foto": "discos/26.jpg"
-    },
-    {
-      "titulo": "José José - Almohada (Letra Oficial)",
-      "artista": "",
-      "youtube": "CAneHUXYTfY",
-      "foto": "discos/27.jpg"
-    },
-    {
-      "titulo": "Como Yo Te Amo (Remastered)",
-      "artista": "",
-      "youtube": "GKbMrvvIvvA",
-      "foto": "discos/28.jpg"
-    },
-    {
-      "titulo": "Ricardo Montaner - Tan Enamorados",
-      "artista": "",
-      "youtube": "_eSOk4VLPQQ",
-      "foto": "discos/29.jpg"
-    },
-    {
-      "titulo": "Golden Brown (Slowed Down Version)",
-      "artista": "",
-      "youtube": "BTnM71u_v2I",
-      "foto": "discos/30.jpg"
-    },
-    {
-      "titulo": "Plan B - Es Un Secreto [Official Video]",
-      "artista": "",
-      "youtube": "fsUP-KYPI98",
-      "foto": "discos/31.jpg"
-    },
-    {
-      "titulo": "Chino & Nacho - Andas En Mi Cabeza (Visualizer) ft. Daddy Yankee",
-      "artista": "",
-      "youtube": "iurajQuBFeM",
-      "foto": "discos/32.jpg"
-    },
-    {
-      "titulo": "Los Caminantes - Cuando Dos Almas (Audio)",
-      "artista": "",
-      "youtube": "37a4KQPpdsc",
-      "foto": "discos/33.jpg"
-    },
-    {
-      "titulo": "José José - La Nave del Olvido (Revisitado [Lyric Video])",
-      "artista": "",
-      "youtube": "BprZX_bGhhg",
-      "foto": "discos/34.jpg"
-    },
-    {
-      "titulo": "Leonardo Favio - Ding Dong, Ding Dong, Estas Cosas del Amor (Official Audio)",
-      "artista": "",
-      "youtube": "YxDlmAxQ3os",
-      "foto": "discos/35.jpg"
-    },
-    {
-      "titulo": "Julieta Venegas - Limón y Sal ((Cover Audio) (Video))",
-      "artista": "",
-      "youtube": "aK55ycK6Wxo",
-      "foto": "discos/36.jpg"
-    },
-    {
-      "titulo": "Chiquetete - Esta Cobardía (Cover Audio. Remasterizado)",
-      "artista": "",
-      "youtube": "V42RAxg0hjo",
-      "foto": "discos/37.jpg"
-    },
-    {
-      "titulo": "Cuco - Piel Canela (Official Animated Video)",
-      "artista": "",
-      "youtube": "aJJI6WgK_qI",
-      "foto": "discos/38.jpg"
-    },
-    {
-      "titulo": "Juan Gabriel - Abrázame Muy Fuerte (Cover Audio Video)",
-      "artista": "",
-      "youtube": "h5N8wDy25F0",
-      "foto": "discos/39.jpg"
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Para ti</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&display=swap">
+  <style>
+    :root {
+      --red: #e0132f;
+      --ink: #2b1a1d;
+      --line: #f0d9dc;
+      --soft: #fdf3f4;
+      color-scheme: light;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
     }
-  ],
-  "carta": "Mi pedacito de cielo,\n\nHoy se cumplen seis meses desde que empezamos esta historia, y mi corazón no puede estar más lleno de alegría. Cada día a tu lado se siente como un regalo, y no hay un solo momento en el que no le agradezca a Dios por haberte puesto en mi camino.\n\nMe haces muy feliz. Tu forma de ser, tu cariño y tu manera de hacerme sentir amada han llenado mi vida de paz y de sonrisas. Contigo he aprendido que el amor es hermoso cuando es sincero, y el tuyo lo es.\n\nQuiero que sepas que te amo muchísimo. Te amo hoy, y toda mi vida te voy a amar. Eso no es una promesa que se dice a la ligera: es lo que siento desde lo más profundo de mi corazón.\n\nCuando pienso en el futuro, te veo a ti. Sé que vas a ser el futuro papá de mis hijos, y me emociona imaginar la familia que Dios nos permitirá construir, llena de amor, de risas y de fe.\n\nQue Dios te bendiga siempre, mi vida. Que te cuide, te guíe y te llene de todo lo bueno que mereces. Y quiero dedicarte este versículo:\n\n“Y sobre todas estas cosas vestíos de amor, que es el vínculo perfecto.”\nColosenses 3:14\n\nGracias por estos seis meses, por cada abrazo, cada risa y cada momento compartido. Que vengan muchos más juntos.\n\nFeliz 6 meses, amor mío. Te amo con todo mi corazón.\n\nCon todo mi amor,\nTu pricesita.",
-  "firma": "Con todo mi amor, Tu pricesita."
-};
-/* ========================================================== */
-(function(){
-  var $ = function(i){ return document.getElementById(i); };
-  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function seguro(u){ return /^https?:\/\//i.test(u) ? u : ''; }
 
-  $('titulo').textContent = CONFIG.titulo; $('subt').textContent = CONFIG.subtitulo;
-  $('songtitle').textContent = CONFIG.tituloCanciones;
+    * {
+      box-sizing: border-box
+    }
 
-  var fotos = CONFIG.fotos.length ? CONFIG.fotos : [null, null, null];
-  fotos.forEach(function(src, i){
-    var d = document.createElement('div'); d.className = 'slide';
-    d.innerHTML = src ? '<img alt="Foto ' + (i + 1) + '" loading="lazy" decoding="async" src="' + src + '">' : 'Aquí va la foto ' + (i + 1);
-    $('car').appendChild(d);
-    if (fotos.length <= 10) { var b = document.createElement('b'); if (!i) b.className = 'on'; $('dots').appendChild(b); }
-  });
-  if (fotos.length > 10) $('dots').textContent = '1 / ' + fotos.length;
-  $('car').addEventListener('scroll', function(){
-    var c = $('car'), k = Math.round(c.scrollLeft / (c.scrollWidth / fotos.length));
-    if (fotos.length > 10) { $('dots').textContent = (k + 1) + ' / ' + fotos.length; return; }
-    Array.prototype.forEach.call($('dots').children, function(b, j){ b.classList.toggle('on', j === k); });
-  });
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+      scroll-behavior: smooth
+    }
 
-  var actual = null, pistas = [], ytCola = [], ytPedido = false;
-  function cargarYT(cb){
-    if (window.YT && YT.Player) { cb(false); return; }
-    ytCola.push(cb);
-    if (ytPedido) return; ytPedido = true;
-    var prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function(){ if (prev) { try { prev(); } catch(_){} } ytCola.splice(0).forEach(function(f){ f(false); }); };
-    var s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; s.async = true;
-    s.onerror = function(){ ytPedido = false; ytCola.splice(0).forEach(function(f){ f(true); }); };
-    document.head.appendChild(s);
-  }
-  function ui(p, on){ p.disc.classList.toggle('play', on); p.btn.textContent = on ? '❚❚' : '▶'; }
-  function reloj(p, on){
-    clearInterval(p.timer);
-    if (on) p.timer = setInterval(function(){
-      try { var d = p.player.getDuration(); if (d) p.bar.style.width = (100 * p.player.getCurrentTime() / d) + '%'; } catch(_){}
-    }, 500);
-  }
-  function parar(p){ ui(p, false); reloj(p, false); if (p.player && p.player.pauseVideo) { try { p.player.pauseVideo(); } catch(_){} } }
-  function reproducir(p){
-    if (actual && actual !== p) parar(actual);
-    actual = p; ui(p, true); p.err.textContent = '';
-    if (!p.id) return;
-    p.box.classList.add('on');
-    if (p.player) { try { p.player.playVideo(); } catch(_){} return; }
-    if (p.cargando) return; p.cargando = true;
-    cargarYT(function(fallo){
-      p.cargando = false;
-      if (fallo || !(window.YT && YT.Player)) { ui(p, false); p.err.textContent = 'No se pudo cargar YouTube. Revisa tu conexión.'; return; }
-      p.player = new YT.Player(p.slot, {
-        videoId: p.id, width: '100%', height: '200',
-        playerVars: { playsinline: 1, rel: 0, autoplay: 1, modestbranding: 1 },
-        events: {
-          onReady: function(e){ if (actual === p) { try { e.target.playVideo(); } catch(_){} } },
-          onStateChange: function(e){
-            if (e.data === 1) { if (actual && actual !== p) parar(actual); actual = p; ui(p, true); reloj(p, true); }
-            else if (e.data === 2) { ui(p, false); reloj(p, false); }
-            else if (e.data === 0) {
-              ui(p, false); reloj(p, false); p.bar.style.width = '0';
-              var n = pistas[pistas.indexOf(p) + 1];
-              if (n) { n.li.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); reproducir(n); }
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--ink);
+      font-family: "Playfair Display", Georgia, serif;
+      line-height: 1.55
+    }
+
+    main {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 0 22px 84px
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      transition: min-height .6s ease
+    }
+
+    .hero.open {
+      min-height: 0;
+      padding-top: 34px
+    }
+
+    .heart {
+      width: 150px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: width .6s ease;
+      animation: beat 1.2s ease-in-out infinite
+    }
+
+    .heart:active {
+      transform: scale(.94)
+    }
+
+    .hero.open .heart {
+      width: 84px;
+      animation: none
+    }
+
+    @keyframes beat {
+      50% {
+        transform: scale(1.1)
+      }
+    }
+
+    .hint {
+      font-style: italic;
+      margin: 6px 0 0;
+      opacity: .7
+    }
+
+    .hero.open .hint {
+      display: none
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-style: italic;
+      font-weight: 500;
+      margin: 10px 0 0;
+      line-height: 1.2
+    }
+
+    .sub {
+      font-style: italic;
+      margin: 4px 0 0;
+      opacity: .75
+    }
+
+    .reveal {
+      display: none
+    }
+
+    .reveal.on {
+      display: block;
+      animation: rise .8s ease both
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px)
+      }
+    }
+
+    .heart:focus-visible,
+    a:focus-visible,
+    .nav-arrow:focus-visible,
+    .fp-btn:focus-visible,
+    .fp-toggle:focus-visible,
+    .fp-expand:focus-visible,
+    .lb-btn:focus-visible {
+      outline: 3px solid var(--red);
+      outline-offset: 3px
+    }
+
+    .stage {
+      position: relative
+    }
+
+    .nav-arrow {
+      display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      color: var(--red);
+      box-shadow: 0 6px 18px rgba(43, 26, 29, .12);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: transform .2s ease, background-color .2s ease, opacity .2s ease
+    }
+
+    .nav-arrow:hover {
+      background: var(--soft);
+      transform: translateY(-50%) scale(1.06)
+    }
+
+    .nav-arrow:active {
+      transform: translateY(-50%) scale(.96)
+    }
+
+    .nav-arrow:disabled {
+      cursor: default;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, .94)
+    }
+
+    .nav-arrow.prev {
+      left: -16px
+    }
+
+    .nav-arrow.next {
+      right: -16px
+    }
+
+    .nav-arrow svg {
+      width: 18px;
+      height: 18px;
+      display: block
+    }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 14px;
+      padding: 22px 2px 12px;
+      scrollbar-width: none
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none
+    }
+
+    .slide {
+      flex: 0 0 86%;
+      scroll-snap-align: center;
+      aspect-ratio: 4/5;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-style: italic;
+      padding: 12px
+    }
+
+    .slide.has-img {
+      padding: 0;
+      cursor: zoom-in
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      justify-content: center;
+      margin: 4px 0 30px
+    }
+
+    .dots b {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--line)
+    }
+
+    .dots b.on {
+      background: var(--red)
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-style: italic;
+      font-weight: 500;
+      margin: 0 0 14px;
+      text-align: center
+    }
+
+    .songs {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 14px;
+      margin: 0;
+      padding: 6px 2px 12px;
+      list-style: none;
+      scrollbar-width: none
+    }
+
+    .songs::-webkit-scrollbar {
+      display: none
+    }
+
+    .song {
+      flex: 0 0 78%;
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding: 22px 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--soft);
+      transition: border-color .25s ease, box-shadow .25s ease
+    }
+
+    .song.active {
+      border-color: rgba(224, 19, 47, .45);
+      box-shadow: 0 8px 24px rgba(224, 19, 47, .08)
+    }
+
+    .disc {
+      flex: 0 0 auto;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      background: repeating-radial-gradient(circle, #161616 0 2px, #2c2c2c 2px 4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+      animation: spin 3.2s linear infinite;
+      animation-play-state: paused
+    }
+
+    .disc.play {
+      animation-play-state: running
+    }
+
+    .disc .label {
+      position: absolute;
+      inset: 27%;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--red);
+      border: 2px solid #fff
+    }
+
+    .disc .label img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .disc:after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      margin: -4.5px 0 0 -4.5px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .4)
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .disc:focus-visible,
+    .pp:focus-visible {
+      outline: 3px solid var(--red);
+      outline-offset: 3px
+    }
+
+    .info {
+      width: 100%;
+      min-width: 0
+    }
+
+    .info b {
+      font-weight: 500;
+      display: block;
+      line-height: 1.3
+    }
+
+    .info small {
+      opacity: .7;
+      font-style: italic;
+      display: block
+    }
+
+    .prog {
+      height: 4px;
+      border-radius: 99px;
+      background: var(--line);
+      margin-top: 8px;
+      overflow: hidden
+    }
+
+    .prog i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--red)
+    }
+
+    .pp {
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--red);
+      color: #fff;
+      font-size: .9rem;
+      cursor: pointer
+    }
+
+    .ytbox {
+      width: 100%;
+      display: none;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000
+    }
+
+    .ytbox.on {
+      display: block
+    }
+
+    .ytbox iframe {
+      display: block;
+      width: 100%;
+      height: 200px;
+      border: 0
+    }
+
+    .yterr {
+      font-size: .85rem;
+      font-style: italic;
+      color: var(--red);
+      min-height: 0
+    }
+
+    .yterr:empty {
+      display: none
+    }
+
+    .letter {
+      white-space: pre-wrap;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 20px;
+      margin-top: 34px
+    }
+
+    .sign {
+      text-align: right;
+      font-style: italic;
+      color: var(--red);
+      margin-top: 12px
+    }
+
+    /* Floating mini-player */
+    .fp {
+      position: fixed;
+      right: max(16px, env(safe-area-inset-right, 0px));
+      bottom: max(16px, env(safe-area-inset-bottom, 0px));
+      z-index: 50;
+      display: none
+    }
+
+    .fp.on {
+      display: block;
+      animation: fpIn .4s ease both
+    }
+
+    @keyframes fpIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.92)
+      }
+    }
+
+    .fp-card {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      border-radius: 27px;
+      background: rgba(255, 255, 255, .96);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(43, 26, 29, .16);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: width .28s cubic-bezier(.22, 1, .36, 1), height .28s cubic-bezier(.22, 1, .36, 1), border-radius .28s ease, box-shadow .28s ease
+    }
+
+    .fp-body {
+      position: absolute;
+      inset: 0;
+      padding: 12px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease
+    }
+
+    .fp-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0
+    }
+
+    .fp-disc {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--red);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+      animation: spin 3.2s linear infinite;
+      animation-play-state: paused
+    }
+
+    .fp-disc.play {
+      animation-play-state: running
+    }
+
+    .fp-disc img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .fp-meta {
+      flex: 1;
+      min-width: 0
+    }
+
+    .fp-title {
+      font-size: .88rem;
+      font-weight: 500;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--ink)
+    }
+
+    .fp-sub {
+      display: flex;
+      gap: 8px;
+      font-size: .75rem;
+      font-style: italic;
+      opacity: .72;
+      margin-top: 1px
+    }
+
+    .fp-prog {
+      height: 3px;
+      border-radius: 99px;
+      background: var(--line);
+      overflow: hidden;
+      margin: 6px 0
+    }
+
+    .fp-prog i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--red);
+      transition: width .25s linear
+    }
+
+    .fp-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-right: 48px;
+      height: 36px
+    }
+
+    .fp-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      cursor: pointer;
+      transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .15s ease
+    }
+
+    .fp-btn:hover {
+      background: #fde6e9;
+      border-color: rgba(224, 19, 47, .35);
+      color: var(--red)
+    }
+
+    .fp-btn:active {
+      transform: scale(.92)
+    }
+
+    .fp-btn.muted {
+      color: var(--red);
+      border-color: rgba(224, 19, 47, .4)
+    }
+
+    .fp-btn svg,
+    .fp-toggle svg {
+      width: 16px;
+      height: 16px;
+      display: block
+    }
+
+    .fp-toggle {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(224, 19, 47, .3);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .18s ease, background-color .18s ease
+    }
+
+    .fp-toggle:hover {
+      background: #c80f29
+    }
+
+    .fp-toggle:active {
+      transform: scale(.93)
+    }
+
+    .fp-toggle.playing::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(224, 19, 47, .25);
+      animation: pulse 1.8s ease-out infinite;
+      pointer-events: none
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(.95);
+        opacity: .9
+      }
+
+      100% {
+        transform: scale(1.22);
+        opacity: 0
+      }
+    }
+
+    .fp-expand {
+      display: none;
+      position: absolute;
+      left: 6px;
+      bottom: 13px;
+      z-index: 2;
+      width: 24px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      color: var(--red);
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    .fp.open .fp-card,
+    .fp.kbd .fp-card {
+      width: min(310px, calc(100vw - 32px));
+      height: 118px;
+      border-radius: 22px;
+      box-shadow: 0 16px 38px rgba(43, 26, 29, .2)
+    }
+
+    .fp.open .fp-body,
+    .fp.kbd .fp-body {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity .22s ease .08s
+    }
+
+    .fp.open .fp-expand,
+    .fp.kbd .fp-expand {
+      display: none !important
+    }
+
+    @media (hover:hover) {
+      .fp:hover .fp-card {
+        width: min(310px, calc(100vw - 32px));
+        height: 118px;
+        border-radius: 22px;
+        box-shadow: 0 16px 38px rgba(43, 26, 29, .2)
+      }
+
+      .fp:hover .fp-body {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity .22s ease .08s
+      }
+    }
+
+    @media (hover:none) {
+      .fp-card {
+        width: 82px;
+        height: 54px
+      }
+
+      .fp-expand {
+        display: flex
+      }
+    }
+
+    /* Lightbox for viewing photos on computer/mobile */
+    .lb {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: rgba(26, 14, 17, .86);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px
+    }
+
+    .lb.on {
+      display: flex;
+      animation: rise .2s ease both
+    }
+
+    .lb img {
+      max-width: min(90vw, 780px);
+      max-height: 84vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+      object-fit: contain;
+      display: block
+    }
+
+    .lb-btn {
+      position: fixed;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .28);
+      background: rgba(255, 255, 255, .14);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.3rem;
+      padding: 0;
+      backdrop-filter: blur(4px)
+    }
+
+    .lb-btn:hover {
+      background: rgba(255, 255, 255, .26)
+    }
+
+    .lb-close {
+      top: 18px;
+      right: 18px
+    }
+
+    .lb-prev {
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%)
+    }
+
+    .lb-next {
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%)
+    }
+
+    .lb-count {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-style: italic;
+      font-size: .95rem;
+      background: rgba(0, 0, 0, .35);
+      padding: 4px 12px;
+      border-radius: 999px
+    }
+
+    /* Desktop adaptation without losing mobile view */
+    @media (min-width:768px) {
+      body {
+        background: radial-gradient(circle at 50% 0%, #fff7f8 0%, #ffffff 52%)
+      }
+
+      main {
+        max-width: 1060px;
+        padding: 0 44px 96px
+      }
+
+      .hero {
+        gap: 10px
+      }
+
+      .hero.open {
+        padding-top: 42px;
+        padding-bottom: 8px
+      }
+
+      .heart {
+        width: 175px
+      }
+
+      .hero.open .heart {
+        width: 90px
+      }
+
+      h1 {
+        font-size: clamp(2.3rem, 3.4vw, 2.9rem)
+      }
+
+      .sub {
+        font-size: 1.12rem
+      }
+
+      h2 {
+        font-size: 1.7rem;
+        margin: 8px 0 18px
+      }
+
+      .nav-arrow {
+        display: flex
+      }
+
+      .carousel {
+        gap: 18px;
+        padding: 24px 2px 14px
+      }
+
+      .slide {
+        flex: 0 0 calc((100% - 18px) / 2);
+        scroll-snap-align: start
+      }
+
+      .slide.has-img:hover img {
+        transform: scale(1.03)
+      }
+
+      .songs {
+        gap: 18px;
+        padding: 8px 2px 14px
+      }
+
+      .song {
+        flex: 0 0 calc((100% - 18px) / 2);
+        scroll-snap-align: start;
+        padding: 24px 18px 20px
+      }
+
+      .letter {
+        max-width: 740px;
+        margin: 46px auto 0;
+        padding: 34px 42px;
+        font-size: 1.06rem;
+        line-height: 1.72;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(43, 26, 29, .04)
+      }
+
+      .fp {
+        right: 26px;
+        bottom: 26px
+      }
+    }
+
+    @media (min-width:1024px) {
+      .slide {
+        flex: 0 0 calc((100% - 36px) / 3)
+      }
+
+      .song {
+        flex: 0 0 calc((100% - 36px) / 3)
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      .heart,
+      .fp-disc,
+      .fp-toggle.playing::before {
+        animation: none
+      }
+
+      .reveal.on,
+      .fp.on,
+      .lb.on {
+        animation: none
+      }
+
+      .hero,
+      .heart,
+      .fp-card,
+      .fp-body,
+      .slide img {
+        transition: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section class="hero" id="hero">
+      <svg class="heart" id="heart" viewBox="0 0 100 90" role="button" tabindex="0" aria-label="Corazón: tócalo">
+        <path d="M50 85C10 55 2 30 18 15C32 2 46 10 50 22C54 10 68 2 82 15C98 30 90 55 50 85Z" fill="#e0132f" />
+      </svg>
+      <p class="hint">Toca el corazón</p>
+      <div class="reveal" id="r1">
+        <h1 id="titulo"></h1>
+        <p class="sub" id="subt"></p>
+      </div>
+    </section>
+
+    <div class="reveal" id="r2">
+      <div class="stage">
+        <button class="nav-arrow prev" id="carPrev" type="button" aria-label="Fotos anteriores"><svg viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg></button>
+        <div class="carousel" id="car"></div>
+        <button class="nav-arrow next" id="carNext" type="button" aria-label="Siguientes fotos"><svg viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg></button>
+      </div>
+      <div class="dots" id="dots"></div>
+      <h2 id="songtitle">Nuestras canciones</h2>
+      <div class="stage">
+        <button class="nav-arrow prev" id="songPrev" type="button" aria-label="Canciones anteriores"><svg
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg></button>
+        <ul class="songs" id="songs"></ul>
+        <button class="nav-arrow next" id="songNext" type="button" aria-label="Siguientes canciones"><svg
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg></button>
+      </div>
+      <div class="dots" id="songdots"></div>
+      <div class="letter" id="letter" style="display:none"><span id="carta"></span>
+        <div class="sign" id="firma"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="fp" id="fp" aria-label="Control de música">
+    <div class="fp-card">
+      <div class="fp-body">
+        <div class="fp-top">
+          <div class="fp-disc" id="fpDisc"><img id="fpImg" alt=""></div>
+          <div class="fp-meta">
+            <div class="fp-title" id="fpTitle">Nuestras canciones</div>
+            <div class="fp-sub"><span id="fpCount"></span><span id="fpStatus">En pausa</span></div>
+          </div>
+        </div>
+        <div class="fp-prog"><i id="fpBar"></i></div>
+        <div class="fp-actions">
+          <button class="fp-btn" id="fpPrev" type="button" title="Canción anterior" aria-label="Canción anterior">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+            </svg>
+          </button>
+          <button class="fp-btn" id="fpNext" type="button" title="Siguiente canción" aria-label="Siguiente canción">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+            </svg>
+          </button>
+          <button class="fp-btn" id="fpMute" type="button" title="Silenciar o activar sonido"
+            aria-label="Silenciar o activar sonido"></button>
+          <button class="fp-btn" id="fpJump" type="button" title="Ir a la lista de canciones"
+            aria-label="Ir a la lista de canciones">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button class="fp-expand" id="fpExpand" type="button" aria-label="Mostrar opciones del reproductor"
+        aria-expanded="false">‹</button>
+      <button class="fp-toggle" id="fpToggle" type="button" aria-label="Reproducir o pausar música"></button>
+    </div>
+  </div>
+
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Cerrar">×</button>
+    <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Foto anterior">‹</button>
+    <img id="lbImg" alt="">
+    <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Foto siguiente">›</button>
+    <div class="lb-count" id="lbCount"></div>
+  </div>
+
+  <script>
+    /* ===== CONFIGURACIÓN: lo único que cambia por cliente ===== */
+    var CONFIG = {
+      "titulo": "Felices 6 meses mi pedacito de cielo",
+      "subtitulo": "Gracias por estar a mi lado",
+      "fotos": [
+        "fotos/001.jpg",
+        "fotos/002.jpg",
+        "fotos/003.jpg",
+        "fotos/004.jpg",
+        "fotos/005.jpg",
+        "fotos/006.jpg",
+        "fotos/007.jpg",
+        "fotos/008.jpg",
+        "fotos/009.jpg",
+        "fotos/010.jpg",
+        "fotos/011.jpg",
+        "fotos/012.jpg",
+        "fotos/013.jpg",
+        "fotos/014.jpg",
+        "fotos/015.jpg",
+        "fotos/016.jpg",
+        "fotos/017.jpg",
+        "fotos/018.jpg",
+        "fotos/019.jpg",
+        "fotos/020.jpg",
+        "fotos/021.jpg",
+        "fotos/022.jpg",
+        "fotos/023.jpg",
+        "fotos/024.jpg",
+        "fotos/025.jpg",
+        "fotos/026.jpg",
+        "fotos/027.jpg",
+        "fotos/028.jpg",
+        "fotos/029.jpg",
+        "fotos/030.jpg",
+        "fotos/031.jpg",
+        "fotos/032.jpg",
+        "fotos/033.jpg",
+        "fotos/034.jpg",
+        "fotos/035.jpg",
+        "fotos/036.jpg",
+        "fotos/037.jpg",
+        "fotos/038.jpg",
+        "fotos/039.jpg",
+        "fotos/040.jpg",
+        "fotos/041.jpg",
+        "fotos/042.jpg",
+        "fotos/043.jpg",
+        "fotos/044.jpg",
+        "fotos/045.jpg",
+        "fotos/046.jpg",
+        "fotos/047.jpg",
+        "fotos/048.jpg",
+        "fotos/049.jpg",
+        "fotos/050.jpg",
+        "fotos/051.jpg",
+        "fotos/052.jpg",
+        "fotos/053.jpg",
+        "fotos/054.jpg"
+      ],
+      "fotoCanciones": "cancion.jpg",
+      "tituloCanciones": "Nuestras canciones",
+      "canciones": [
+        {
+          "titulo": "El Libro De La Vida - Te Amo Y Más (By: Diego Luna) (Letra)",
+          "artista": "",
+          "youtube": "p_1Osm5xE5Y",
+          "foto": "discos/01.jpg"
+        },
+        {
+          "titulo": "Sabrás, Herencia de Timbiquí - Video Oficial",
+          "artista": "",
+          "youtube": "srE7nr4xuGI",
+          "foto": "discos/02.jpg"
+        },
+        {
+          "titulo": "Te invito - Herencia de Timbiquí (video oficial)",
+          "artista": "",
+          "youtube": "eaKG17XoQ48",
+          "foto": "discos/03.jpg"
+        },
+        {
+          "titulo": "Vámonos a Marte",
+          "artista": "",
+          "youtube": "mxCW-5nUidw",
+          "foto": "discos/04.jpg"
+        },
+        {
+          "titulo": "Estar enamorado",
+          "artista": "",
+          "youtube": "h14vpBPY9MM",
+          "foto": "discos/05.jpg"
+        },
+        {
+          "titulo": "Brillas",
+          "artista": "",
+          "youtube": "AzFh98baKrM",
+          "foto": "discos/06.jpg"
+        },
+        {
+          "titulo": "José José - Te Quiero Así (Letra/lyrics)",
+          "artista": "",
+          "youtube": "pXE2W4Rnjs0",
+          "foto": "discos/07.jpg"
+        },
+        {
+          "titulo": "José José - Buenos Días, Amor (Letra / Lyrics)",
+          "artista": "",
+          "youtube": "qSKfmr2r6B4",
+          "foto": "discos/08.jpg"
+        },
+        {
+          "titulo": "Carla Morrison - Disfruto (letra)",
+          "artista": "",
+          "youtube": "jwP1HRmDVII",
+          "foto": "discos/09.jpg"
+        },
+        {
+          "titulo": "Chichi Peralta   Amor narcotico",
+          "artista": "",
+          "youtube": "QMt7TWvY8VQ",
+          "foto": "discos/10.jpg"
+        },
+        {
+          "titulo": "Leonardo Favio - O Quizás Simplemente Le Regale una Rosa (Official Audio)",
+          "artista": "",
+          "youtube": "LEg5mroggFc",
+          "foto": "discos/11.jpg"
+        },
+        {
+          "titulo": "Dario Javier - Si Entendieras (Video Oficial)",
+          "artista": "",
+          "youtube": "_5MycQSty00",
+          "foto": "discos/12.jpg"
+        },
+        {
+          "titulo": "Miguel Bosé - Te Amaré (300 Millones (Actuación TVE))",
+          "artista": "",
+          "youtube": "e8-onsrhBBo",
+          "foto": "discos/13.jpg"
+        },
+        {
+          "titulo": "Bella, Wolfine -  Vídeo Oficial",
+          "artista": "",
+          "youtube": "UA0YaA06Puo",
+          "foto": "discos/14.jpg"
+        },
+        {
+          "titulo": "Prince Royce - Darte un Beso (Official Video)",
+          "artista": "",
+          "youtube": "bdOXnTbyk0g",
+          "foto": "discos/15.jpg"
+        },
+        {
+          "titulo": "Daniela Romo | De mi enamórate #Videoclip",
+          "artista": "",
+          "youtube": "pmjDuhIPUm0",
+          "foto": "discos/16.jpg"
+        },
+        {
+          "titulo": "Joan Sebastian – Hasta Que Amanezca (Letra Oficial)",
+          "artista": "",
+          "youtube": "bx-FrNoav5o",
+          "foto": "discos/17.jpg"
+        },
+        {
+          "titulo": "Dyango El Primer Beso",
+          "artista": "",
+          "youtube": "RhrFnaYednk",
+          "foto": "discos/18.jpg"
+        },
+        {
+          "titulo": "José José - Lo Dudo (Revisitado [Lyric Video])",
+          "artista": "",
+          "youtube": "CpBvjrkRKN4",
+          "foto": "discos/19.jpg"
+        },
+        {
+          "titulo": "Como Es Grande Mi Amor",
+          "artista": "",
+          "youtube": "nqxAXwYt5ME",
+          "foto": "discos/20.jpg"
+        },
+        {
+          "titulo": "Juan Gabriel - Siempre en Mi Mente (Cover Audio)",
+          "artista": "",
+          "youtube": "YzYmF059VkU",
+          "foto": "discos/21.jpg"
+        },
+        {
+          "titulo": "Jósean Log - Chachachá (Lyric Video)",
+          "artista": "",
+          "youtube": "sDMxQF18yvA",
+          "foto": "discos/22.jpg"
+        },
+        {
+          "titulo": "Hoy tengo ganas de ti",
+          "artista": "",
+          "youtube": "Jh_y54QFfOU",
+          "foto": "discos/23.jpg"
+        },
+        {
+          "titulo": "Camilo Sesto - El Amor De Mi Vida (Video TVE/Playback)",
+          "artista": "",
+          "youtube": "vM6r0Z8ie1g",
+          "foto": "discos/24.jpg"
+        },
+        {
+          "titulo": "Me Enamoré De Alguien Que También",
+          "artista": "",
+          "youtube": "kLKxDw2GQVg",
+          "foto": "discos/25.jpg"
+        },
+        {
+          "titulo": "Myriam Hernández - Eres (Visualiser)",
+          "artista": "",
+          "youtube": "bGbX6zOecis",
+          "foto": "discos/26.jpg"
+        },
+        {
+          "titulo": "José José - Almohada (Letra Oficial)",
+          "artista": "",
+          "youtube": "CAneHUXYTfY",
+          "foto": "discos/27.jpg"
+        },
+        {
+          "titulo": "Como Yo Te Amo (Remastered)",
+          "artista": "",
+          "youtube": "GKbMrvvIvvA",
+          "foto": "discos/28.jpg"
+        },
+        {
+          "titulo": "Ricardo Montaner - Tan Enamorados",
+          "artista": "",
+          "youtube": "_eSOk4VLPQQ",
+          "foto": "discos/29.jpg"
+        },
+        {
+          "titulo": "Golden Brown (Slowed Down Version)",
+          "artista": "",
+          "youtube": "BTnM71u_v2I",
+          "foto": "discos/30.jpg"
+        },
+        {
+          "titulo": "Plan B - Es Un Secreto [Official Video]",
+          "artista": "",
+          "youtube": "fsUP-KYPI98",
+          "foto": "discos/31.jpg"
+        },
+        {
+          "titulo": "Chino & Nacho - Andas En Mi Cabeza (Visualizer) ft. Daddy Yankee",
+          "artista": "",
+          "youtube": "iurajQuBFeM",
+          "foto": "discos/32.jpg"
+        },
+        {
+          "titulo": "Los Caminantes - Cuando Dos Almas (Audio)",
+          "artista": "",
+          "youtube": "37a4KQPpdsc",
+          "foto": "discos/33.jpg"
+        },
+        {
+          "titulo": "José José - La Nave del Olvido (Revisitado [Lyric Video])",
+          "artista": "",
+          "youtube": "BprZX_bGhhg",
+          "foto": "discos/34.jpg"
+        },
+        {
+          "titulo": "Leonardo Favio - Ding Dong, Ding Dong, Estas Cosas del Amor (Official Audio)",
+          "artista": "",
+          "youtube": "YxDlmAxQ3os",
+          "foto": "discos/35.jpg"
+        },
+        {
+          "titulo": "Julieta Venegas - Limón y Sal ((Cover Audio) (Video))",
+          "artista": "",
+          "youtube": "aK55ycK6Wxo",
+          "foto": "discos/36.jpg"
+        },
+        {
+          "titulo": "Chiquetete - Esta Cobardía (Cover Audio. Remasterizado)",
+          "artista": "",
+          "youtube": "V42RAxg0hjo",
+          "foto": "discos/37.jpg"
+        },
+        {
+          "titulo": "Cuco - Piel Canela (Official Animated Video)",
+          "artista": "",
+          "youtube": "aJJI6WgK_qI",
+          "foto": "discos/38.jpg"
+        },
+        {
+          "titulo": "Juan Gabriel - Abrázame Muy Fuerte (Cover Audio Video)",
+          "artista": "",
+          "youtube": "h5N8wDy25F0",
+          "foto": "discos/39.jpg"
+        }
+      ],
+      "carta": "Mi pedacito de cielo,\n\nHoy se cumplen seis meses desde que empezamos esta historia, y mi corazón no puede estar más lleno de alegría. Cada día a tu lado se siente como un regalo, y no hay un solo momento en el que no le agradezca a Dios por haberte puesto en mi camino.\n\nMe haces muy feliz. Tu forma de ser, tu cariño y tu manera de hacerme sentir amada han llenado mi vida de paz y de sonrisas. Contigo he aprendido que el amor es hermoso cuando es sincero, y el tuyo lo es.\n\nQuiero que sepas que te amo muchísimo. Te amo hoy, y toda mi vida te voy a amar. Eso no es una promesa que se dice a la ligera: es lo que siento desde lo más profundo de mi corazón.\n\nCuando pienso en el futuro, te veo a ti. Sé que vas a ser el futuro papá de mis hijos, y me emociona imaginar la familia que Dios nos permitirá construir, llena de amor, de risas y de fe.\n\nQue Dios te bendiga siempre, mi vida. Que te cuide, te guíe y te llene de todo lo bueno que mereces. Y quiero dedicarte este versículo:\n\n“Y sobre todas estas cosas vestíos de amor, que es el vínculo perfecto.”\nColosenses 3:14\n\nGracias por estos seis meses, por cada abrazo, cada risa y cada momento compartido. Que vengan muchos más juntos.\n\nFeliz 6 meses, amor mío. Te amo con todo mi corazón.\n\nCon todo mi amor,\nTu pricesita.",
+      "firma": "Con todo mi amor, Tu pricesita."
+    };
+    /* ========================================================== */
+    (function () {
+      var $ = function (i) { return document.getElementById(i); };
+      function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+      var ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+      var ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>';
+      var ICON_VOL_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+      var ICON_VOL_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6"/></svg>';
+
+      $('titulo').textContent = CONFIG.titulo; $('subt').textContent = CONFIG.subtitulo;
+      $('songtitle').textContent = CONFIG.tituloCanciones;
+      $('fpToggle').innerHTML = ICON_PLAY;
+      $('fpMute').innerHTML = ICON_VOL_ON;
+
+      var fotos = CONFIG.fotos.length ? CONFIG.fotos : [null, null, null];
+      var lbIdx = 0, fotosReales = [];
+      fotos.forEach(function (src, i) {
+        var d = document.createElement('div');
+        d.className = 'slide' + (src ? ' has-img' : '');
+        d.innerHTML = src ? '<img alt="Foto ' + (i + 1) + '" loading="lazy" decoding="async" src="' + src + '">' : 'Aquí va la foto ' + (i + 1);
+        if (src) {
+          var realIdx = fotosReales.push(src) - 1;
+          d.addEventListener('click', function () { abrirLightbox(realIdx); });
+        }
+        $('car').appendChild(d);
+        if (fotos.length <= 10) { var b = document.createElement('b'); if (!i) b.className = 'on'; $('dots').appendChild(b); }
+      });
+      if (fotos.length > 10) $('dots').textContent = '1 / ' + fotos.length;
+
+      function setupTrack(track, prevBtn, nextBtn, dotsEl, count, isDots) {
+        function update() {
+          var max = track.scrollWidth - track.clientWidth;
+          var k = max > 2 ? Math.round((track.scrollLeft / max) * (count - 1)) : 0;
+          k = Math.max(0, Math.min(count - 1, k));
+          if (isDots) {
+            Array.prototype.forEach.call(dotsEl.children, function (b, j) { b.classList.toggle('on', j === k); });
+          } else if (count > 1) {
+            dotsEl.textContent = (k + 1) + ' / ' + count;
+          }
+          if (prevBtn) { prevBtn.style.opacity = track.scrollLeft <= 4 ? '.35' : '1'; prevBtn.disabled = track.scrollLeft <= 4; }
+          if (nextBtn) { nextBtn.style.opacity = track.scrollLeft >= max - 4 ? '.35' : '1'; nextBtn.disabled = track.scrollLeft >= max - 4; }
+        }
+        function stepBy(dir) {
+          var first = track.children[0];
+          if (!first) return;
+          var gap = parseFloat(getComputedStyle(track).gap) || 14;
+          var cardStep = first.getBoundingClientRect().width + gap;
+          var perPage = Math.max(1, Math.floor((track.clientWidth + gap + 2) / cardStep));
+          track.scrollBy({ left: dir * perPage * cardStep, behavior: 'smooth' });
+        }
+        track.addEventListener('scroll', update);
+        if (prevBtn) prevBtn.addEventListener('click', function () { stepBy(-1); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { stepBy(1); });
+        window.addEventListener('resize', update);
+        return update;
+      }
+
+      var actualizarCar = setupTrack($('car'), $('carPrev'), $('carNext'), $('dots'), fotos.length, fotos.length <= 10);
+
+      function renderLightbox() {
+        if (!fotosReales.length) return;
+        lbIdx = (lbIdx + fotosReales.length) % fotosReales.length;
+        $('lbImg').src = fotosReales[lbIdx];
+        $('lbImg').alt = 'Foto ' + (lbIdx + 1);
+        $('lbCount').textContent = (lbIdx + 1) + ' / ' + fotosReales.length;
+      }
+      function abrirLightbox(idx) {
+        if (!fotosReales.length) return;
+        lbIdx = idx;
+        renderLightbox();
+        $('lb').classList.add('on');
+      }
+      function cerrarLightbox() { $('lb').classList.remove('on'); }
+      $('lbClose').addEventListener('click', cerrarLightbox);
+      $('lbPrev').addEventListener('click', function () { lbIdx--; renderLightbox(); });
+      $('lbNext').addEventListener('click', function () { lbIdx++; renderLightbox(); });
+      $('lb').addEventListener('click', function (e) { if (e.target === $('lb')) cerrarLightbox(); });
+      document.addEventListener('keydown', function (e) {
+        if (!$('lb').classList.contains('on')) return;
+        if (e.key === 'Escape') cerrarLightbox();
+        else if (e.key === 'ArrowLeft') { lbIdx--; renderLightbox(); }
+        else if (e.key === 'ArrowRight') { lbIdx++; renderLightbox(); }
+      });
+
+      var actual = null, pistas = [], ytCola = [], ytPedido = false, silenciado = false;
+      function cargarYT(cb) {
+        if (window.YT && YT.Player) { cb(false); return; }
+        ytCola.push(cb);
+        if (ytPedido) return; ytPedido = true;
+        var prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function () { if (prev) { try { prev(); } catch (_) { } } ytCola.splice(0).forEach(function (f) { f(false); }); };
+        var s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; s.async = true;
+        s.onerror = function () { ytPedido = false; ytCola.splice(0).forEach(function (f) { f(true); }); };
+        document.head.appendChild(s);
+      }
+      cargarYT(function () { });
+
+      function centrarCancion(li) {
+        var c = $('songs');
+        var left = li.offsetLeft - (c.clientWidth - li.offsetWidth) / 2;
+        c.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+      }
+      function syncFP(p, on) {
+        if (!p) return;
+        var idx = pistas.indexOf(p);
+        $('fpTitle').textContent = p.titulo;
+        $('fpCount').textContent = (idx + 1) + ' / ' + pistas.length;
+        $('fpImg').src = p.foto || '';
+        $('fpImg').style.display = p.foto ? 'block' : 'none';
+        $('fpDisc').classList.toggle('play', on);
+        $('fpToggle').classList.toggle('playing', on);
+        $('fpToggle').innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+        $('fpToggle').setAttribute('aria-label', (on ? 'Pausar ' : 'Reproducir ') + p.titulo);
+        $('fpStatus').textContent = on ? 'Reproduciendo' : 'En pausa';
+      }
+      function ui(p, on) {
+        p.disc.classList.toggle('play', on);
+        p.btn.textContent = on ? '❚❚' : '▶';
+        if (actual === p) syncFP(p, on);
+      }
+      function reloj(p, on) {
+        clearInterval(p.timer);
+        if (on) p.timer = setInterval(function () {
+          try {
+            var d = p.player.getDuration();
+            if (d) {
+              var pct = (100 * p.player.getCurrentTime() / d) + '%';
+              p.bar.style.width = pct;
+              if (actual === p) $('fpBar').style.width = pct;
             }
-          },
-          onError: function(){ ui(p, false); reloj(p, false); p.err.textContent = 'Este video no se puede reproducir aquí.'; }
+          } catch (_) { }
+        }, 500);
+      }
+      function mostrarErrorYT(p, msg) {
+        p.err.textContent = msg + ' ';
+        if (p.id) {
+          var a = document.createElement('a');
+          a.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(p.id);
+          a.target = '_blank'; a.rel = 'noopener noreferrer';
+          a.style.color = 'inherit';
+          a.textContent = 'Abrir en YouTube';
+          p.err.appendChild(a);
+        }
+      }
+      function parar(p) {
+        clearTimeout(p.autoCheck);
+        ui(p, false); reloj(p, false);
+        if (p.player && p.player.pauseVideo) { try { p.player.pauseVideo(); } catch (_) { } }
+      }
+      function aplicarSilencio(player) {
+        if (!player) return;
+        try { if (silenciado && player.mute) player.mute(); else if (!silenciado && player.unMute) player.unMute(); } catch (_) { }
+      }
+      function reproducir(p) {
+        if (!p) return;
+        if (actual && actual !== p) {
+          actual.li.classList.remove('active');
+          parar(actual);
+        }
+        actual = p;
+        p.li.classList.add('active');
+        $('fpBar').style.width = p.bar.style.width || '0';
+        ui(p, true);
+        p.err.textContent = '';
+        if (!p.id) return;
+        p.box.classList.add('on');
+        if (p.player) {
+          aplicarSilencio(p.player);
+          try { p.player.playVideo(); } catch (_) { }
+          return;
+        }
+        if (p.cargando) return; p.cargando = true;
+        cargarYT(function (fallo) {
+          p.cargando = false;
+          if (fallo || !(window.YT && YT.Player)) { ui(p, false); p.err.textContent = 'No se pudo cargar YouTube. Revisa tu conexión.'; return; }
+          p.player = new YT.Player(p.slot, {
+            videoId: p.id, width: '100%', height: '200',
+            playerVars: { playsinline: 1, rel: 0, autoplay: 1, modestbranding: 1 },
+            events: {
+              onReady: function (e) {
+                aplicarSilencio(e.target);
+                if (actual === p) {
+                  try { e.target.playVideo(); } catch (_) { }
+                  clearTimeout(p.autoCheck);
+                  p.autoCheck = setTimeout(function () {
+                    if (actual !== p || !p.player || !p.player.getPlayerState) return;
+                    try {
+                      var st = p.player.getPlayerState();
+                      if (st !== 1 && st !== 3) ui(p, false);
+                    } catch (_) { }
+                  }, 2200);
+                }
+              },
+              onStateChange: function (e) {
+                if (e.data === 1) {
+                  clearTimeout(p.autoCheck);
+                  if (actual && actual !== p) { actual.li.classList.remove('active'); parar(actual); }
+                  actual = p; p.li.classList.add('active'); ui(p, true); reloj(p, true);
+                } else if (e.data === 2) {
+                  ui(p, false); reloj(p, false);
+                } else if (e.data === 0) {
+                  ui(p, false); reloj(p, false); p.bar.style.width = '0';
+                  if (actual === p) $('fpBar').style.width = '0';
+                  var n = pistas[pistas.indexOf(p) + 1];
+                  if (n) { centrarCancion(n.li); reproducir(n); }
+                }
+              },
+              onError: function () {
+                clearTimeout(p.autoCheck);
+                ui(p, false); reloj(p, false);
+                var msg = location.protocol === 'file:'
+                  ? 'Para reproducir aquí abre el proyecto desde un servidor web o GitHub Pages.'
+                  : 'Este video no se puede reproducir aquí.';
+                mostrarErrorYT(p, msg);
+              }
+            }
+          });
+        });
+      }
+      function alternar(p) { if (actual === p && p.disc.classList.contains('play')) parar(p); else reproducir(p); }
+
+      CONFIG.canciones.forEach(function (s) {
+        var foto = s.foto || CONFIG.fotoCanciones;
+        var li = document.createElement('li'); li.className = 'song';
+        li.innerHTML = '<button class="disc" type="button" aria-label="Reproducir ' + esc(s.titulo) + '"><span class="label">' +
+          (foto ? '<img alt="" src="' + foto + '">' : '') + '</span></button>' +
+          '<div class="info"><b>' + esc(s.titulo) + '</b><small>' + esc(s.artista) + '</small><div class="prog"><i></i></div></div>' +
+          '<button class="pp" type="button" aria-label="Reproducir o pausar ' + esc(s.titulo) + '">▶</button>' +
+          '<div class="ytbox"><div class="ytslot"></div></div><div class="yterr" role="status"></div>';
+        var id = /^[A-Za-z0-9_-]{11}$/.test(s.youtube || '') ? s.youtube : '';
+        var p = {
+          li: li, id: id, titulo: s.titulo || 'Canción', foto: foto || '', disc: li.querySelector('.disc'), btn: li.querySelector('.pp'), bar: li.querySelector('.prog i'),
+          box: li.querySelector('.ytbox'), slot: li.querySelector('.ytslot'), err: li.querySelector('.yterr'), player: null, timer: 0, autoCheck: 0, cargando: false
+        };
+        pistas.push(p);
+        p.disc.addEventListener('click', function () { alternar(p); });
+        p.btn.addEventListener('click', function () { alternar(p); });
+        $('songs').appendChild(li);
+      });
+
+      var total = CONFIG.canciones.length;
+      var actualizarSongs = setupTrack($('songs'), $('songPrev'), $('songNext'), $('songdots'), total, false);
+      if (total > 1) $('songdots').textContent = '1 / ' + total;
+      if (!total) { $('songtitle').style.display = 'none'; $('songPrev').style.display = 'none'; $('songNext').style.display = 'none'; }
+
+      $('fpToggle').addEventListener('click', function () {
+        if (!pistas.length) return;
+        alternar(actual || pistas[0]);
+      });
+      $('fpPrev').addEventListener('click', function () {
+        if (!pistas.length) return;
+        var idx = actual ? pistas.indexOf(actual) : 0;
+        var target = pistas[(idx - 1 + pistas.length) % pistas.length];
+        centrarCancion(target.li);
+        reproducir(target);
+      });
+      $('fpNext').addEventListener('click', function () {
+        if (!pistas.length) return;
+        var idx = actual ? pistas.indexOf(actual) : -1;
+        var target = pistas[(idx + 1) % pistas.length];
+        centrarCancion(target.li);
+        reproducir(target);
+      });
+      $('fpMute').addEventListener('click', function () {
+        silenciado = !silenciado;
+        $('fpMute').innerHTML = silenciado ? ICON_VOL_OFF : ICON_VOL_ON;
+        $('fpMute').classList.toggle('muted', silenciado);
+        if (actual && actual.player) aplicarSilencio(actual.player);
+      });
+      $('fpJump').addEventListener('click', function () {
+        $('songtitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (actual) centrarCancion(actual.li);
+      });
+      $('fpExpand').addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = $('fp').classList.toggle('open');
+        $('fpExpand').setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      $('fp').addEventListener('focusin', function (e) {
+        try { if (e.target.matches(':focus-visible')) $('fp').classList.add('kbd'); } catch (_) { }
+      });
+      $('fp').addEventListener('focusout', function () {
+        setTimeout(function () {
+          if (!$('fp').contains(document.activeElement)) $('fp').classList.remove('kbd');
+        }, 0);
+      });
+      document.addEventListener('pointerdown', function () { $('fp').classList.remove('kbd'); });
+      document.addEventListener('click', function (e) {
+        if ($('fp').classList.contains('open') && !$('fp').contains(e.target)) {
+          $('fp').classList.remove('open');
+          $('fpExpand').setAttribute('aria-expanded', 'false');
         }
       });
-    });
-  }
-  function alternar(p){ if (actual === p && p.disc.classList.contains('play')) parar(p); else reproducir(p); }
 
-  CONFIG.canciones.forEach(function(s){
-    var foto = s.foto || CONFIG.fotoCanciones;
-    var li = document.createElement('li'); li.className = 'song';
-    li.innerHTML = '<button class="disc" type="button" aria-label="Reproducir ' + esc(s.titulo) + '"><span class="label">' +
-      (foto ? '<img alt="" src="' + foto + '">' : '') + '</span></button>' +
-      '<div class="info"><b>' + esc(s.titulo) + '</b><small>' + esc(s.artista) + '</small><div class="prog"><i></i></div></div>' +
-      '<button class="pp" type="button" aria-label="Reproducir o pausar ' + esc(s.titulo) + '">▶</button>' +
-      '<div class="ytbox"><div class="ytslot"></div></div><div class="yterr" role="status"></div>';
-    var id = /^[A-Za-z0-9_-]{11}$/.test(s.youtube || '') ? s.youtube : '';
-    var p = { li: li, id: id, disc: li.querySelector('.disc'), btn: li.querySelector('.pp'), bar: li.querySelector('.prog i'),
-              box: li.querySelector('.ytbox'), slot: li.querySelector('.ytslot'), err: li.querySelector('.yterr'), player: null, timer: 0, cargando: false };
-    pistas.push(p);
-    p.disc.addEventListener('click', function(){ alternar(p); });
-    p.btn.addEventListener('click', function(){ alternar(p); });
-    $('songs').appendChild(li);
-  });
-  var total = CONFIG.canciones.length;
-  if (total > 1) {
-    $('songdots').textContent = '1 / ' + total;
-    $('songs').addEventListener('scroll', function(){
-      var c = $('songs'), k = Math.round(c.scrollLeft / (c.scrollWidth / total));
-      $('songdots').textContent = (Math.min(k, total - 1) + 1) + ' / ' + total;
-    });
-  }
-  if (!CONFIG.canciones.length) { $('songtitle').style.display = 'none'; }
+      if (CONFIG.carta) {
+        $('carta').textContent = CONFIG.carta; $('firma').textContent = CONFIG.firma; $('letter').style.display = 'block';
+      }
 
-  if (CONFIG.carta) {
-    $('carta').textContent = CONFIG.carta; $('firma').textContent = CONFIG.firma; $('letter').style.display = 'block';
-  }
-
-  var abierto = false;
-  function abrir(){
-    if (abierto) return; abierto = true;
-    if (navigator.vibrate) { try { navigator.vibrate(30); } catch(_){} }
-    $('hero').classList.add('open'); $('r1').classList.add('on'); $('r2').classList.add('on');
-    $('heart').removeAttribute('role'); $('heart').removeAttribute('tabindex');
-  }
-  $('heart').addEventListener('click', abrir);
-  $('heart').addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
-})();
-</script>
+      var abierto = false;
+      function abrir() {
+        if (abierto) return; abierto = true;
+        if (navigator.vibrate) { try { navigator.vibrate(30); } catch (_) { } }
+        $('hero').classList.add('open'); $('r1').classList.add('on'); $('r2').classList.add('on');
+        $('heart').removeAttribute('role'); $('heart').removeAttribute('tabindex');
+        requestAnimationFrame(function () { actualizarCar(); actualizarSongs(); });
+        if (pistas.length) {
+          $('fp').classList.add('on');
+          reproducir(pistas[0]);
+        }
+      }
+      $('heart').addEventListener('click', abrir);
+      $('heart').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+    })();
+  </script>
 </body>
+
 </html>
